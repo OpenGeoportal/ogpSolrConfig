@@ -126,7 +126,7 @@
     <!-- this field contains a JSON hashtable that roughly equates to protocolName: serviceEndpoint -->
     <field name="Location" type="string" indexed="true" stored="true" multiValued="false"/>
     <!-- Institution name -->
-    <field name="Institution" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="Institution" type="lowercase" indexed="true" stored="true" multiValued="false"/>
     
      <!-- has this layer been accurately georeferenced and can it be laid over top of a basemap? -->
     <field name="GeoReferenced" type="boolean" indexed="false" stored="true" multiValued="false" default="true"/>
@@ -136,7 +136,7 @@
 
     <!-- Layer Metadata -->
     <!-- the type of data the layer holds: Point, Vector, Polygon, Raster, ScannedMap -->
-    <field name="DataType" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="DataType" type="lowercase" indexed="true" stored="true" multiValued="false"/>
 
     <!-- layer title --> 
     <field name="LayerDisplayName" type="text_en" indexed="true" stored="true" multiValued="false"/>
@@ -146,8 +146,6 @@
     
     <!-- layer originator -->
     <field name="Originator" type="text_en" indexed="true" stored="true" multiValued="false"/>
-
-
 
 
      <!-- a string containing all the theme keywords, place keywords
@@ -163,7 +161,7 @@
 
      <!-- the complete metadata record as a string. it is not indexed by Solr but retreived from Solr
       when the user requests to see the metadata -->
-     <field name="FgdcText" type="string" indexed="false" stored="true" multiValued="false"/>
+     <field name="FgdcText" type="string" indexed="false" stored="true" multiValued="false" docValues="false"/>
 
      <!-- lat/lon bounding box stored in decimal degrees. -->
      <!-- south -->
@@ -189,7 +187,7 @@
      <field name="Availability" type="string" indexed="true" stored="true" multiValued="false"/>
 
      <!-- the projection code is passed to GeoServer; currently unused -->
-     <field name="SrsProjectionCode" type="text_en" indexed="true" stored="true" multiValued="false"/>
+     <field name="SrsProjectionCode" type="string" indexed="true" stored="true" multiValued="false"/>
 
     <!-- analysis fields (values copied from above on index) -->
     <field name="InstitutionSort" type="string" indexed="true" stored="false" multiValued="false"/>
@@ -512,8 +510,7 @@
           </analyzer>
           <analyzer type="query">
               <tokenizer class="solr.StandardTokenizerFactory"/>
-              
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
               <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
               <filter class="solr.LowerCaseFilterFactory"/>
               <filter class="solr.EnglishPossessiveFilterFactory"/>
@@ -546,9 +543,8 @@
           </analyzer>
           <analyzer type="query">
               <tokenizer class="solr.StandardTokenizerFactory"/>
-              
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsState.txt" ignoreCase="true" expand="true"/>
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsState.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
               <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
               <filter class="solr.LowerCaseFilterFactory"/>
               <filter class="solr.EnglishPossessiveFilterFactory"/>
@@ -581,9 +577,8 @@
           </analyzer>
           <analyzer type="query">
               <tokenizer class="solr.StandardTokenizerFactory"/>
-              
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsIso.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsLcsh.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsIso.txt" ignoreCase="true" expand="true"/>
               <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
               <filter class="solr.LowerCaseFilterFactory"/>
               <filter class="solr.EnglishPossessiveFilterFactory"/>
@@ -615,8 +610,7 @@
           </analyzer>
           <analyzer type="query">
               <tokenizer class="solr.StandardTokenizerFactory"/>
-              
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsState.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsState.txt" ignoreCase="true" expand="true"/>
               <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
               <filter class="solr.LowerCaseFilterFactory"/>
               <filter class="solr.EnglishPossessiveFilterFactory"/>
@@ -650,8 +644,7 @@
           </analyzer>
           <analyzer type="query">
               <tokenizer class="solr.StandardTokenizerFactory"/>
-              
-              <filter class="solr.SynonymFilterFactory" synonyms="synonymsIso.txt" ignoreCase="true" expand="true"/>
+              <filter class="solr.SynonymGraphFilterFactory" synonyms="synonymsIso.txt" ignoreCase="true" expand="true"/>
               <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
               <filter class="solr.LowerCaseFilterFactory"/>
               <filter class="solr.EnglishPossessiveFilterFactory"/>
